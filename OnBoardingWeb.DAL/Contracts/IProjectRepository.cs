@@ -13,5 +13,7 @@ namespace OnBoardingWeb.DAL.Contracts
         List<Project> SearchProjectByName(string name);
         Project GetProjectById(Guid id);
         List<Project> LoadProject();
+        bool DeleteProject(Guid id);
+        void AddProject(Project p);
     }
 }

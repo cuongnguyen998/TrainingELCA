@@ -41,7 +41,7 @@ namespace OnBoardingWeb.UI
             if (_selectedProject != null)
             {
                 txtName.Text = _selectedProject.Name;
-                txtDescription.Text = _selectedProject.Description;
+                txtaDescription.InnerHtml = _selectedProject.Description; //.Text = _selectedProject.Description;
                 txtStartDate.Text = Convert.ToDateTime(_selectedProject.StartDate).ToString("yyyy-MM-dd");
                 txtStudyHour.Text = _selectedProject.StudyHour.ToString();
             }
@@ -60,12 +60,18 @@ namespace OnBoardingWeb.UI
             {
                 _selectedProject.Id = Guid.Parse(Request.QueryString["Id"]);
                 _selectedProject.Name = txtName.Text;
-                _selectedProject.Description = txtDescription.Text;
+                _selectedProject.Description = txtaDescription.InnerHtml; //txtDescription.Text;
                 _selectedProject.StartDate = Convert.ToDateTime(txtStartDate.Text);
                 _selectedProject.StudyHour = Convert.ToDecimal(txtStudyHour.Text);
                 _rep.ProjectRepository.UpdateProject(_selectedProject.Id, _selectedProject);
                 _rep.SaveChange();
                 Response.Redirect("~/ProjectPage.aspx", false);
+            }
+            catch (FormatException formatEx)
+            {
+                lbError.Visible = true;
+                lbError.Text = formatEx.Message + formatEx.StackTrace;
+                LogError(formatEx.Message + " " + formatEx.StackTrace);
             }
             catch (Exception ex)
             {
@@ -76,5 +82,42 @@ namespace OnBoardingWeb.UI
         }
         #endregion
 
+        protected void btnDelete_Click(object sender, EventArgs e)
+        {
+            string confirmValue = Request.Form["confirm_value"];
+            if (confirmValue == "Yes")
+            {
+                try
+                {
+                    bool isDeleted = _rep.ProjectRepository.DeleteProject(Guid.Parse(Request.QueryString["Id"]));
+                    if (isDeleted)
+                    {
+                        _rep.SaveChange();
+                    }
+                }
+                catch(ArgumentNullException argNullEx)
+                {
+                    lbError.Visible = true;
+                    lbError.Text = "The Id cannot be null. Please check again or see log file for detail";
+                    LogError(argNullEx.Message);
+                }
+                catch (InvalidCastException castException)
+                {
+                    lbError.Visible = true;
+                    lbError.Text = "Invalid cast exception. Please check again or see log file for detail";
+                    LogError(castException.Message);
+                }
+                Response.Redirect("~/ProjectPage.aspx", false);
+            }
+            else
+            {
+                this.Page.ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('You clicked NO!')", true);
+            }
+
+
+            
+        }
+
+        
     }
 }

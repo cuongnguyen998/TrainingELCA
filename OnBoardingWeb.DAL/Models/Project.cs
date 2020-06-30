@@ -19,5 +19,6 @@ namespace OnBoardingWeb.DAL.Models
         public string Description { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<decimal> StudyHour { get; set; }
+        public Nullable<bool> Active { get; set; }
     }
 }

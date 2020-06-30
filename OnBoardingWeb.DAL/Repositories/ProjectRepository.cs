@@ -2,6 +2,7 @@
 using OnBoardingWeb.DAL.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -37,7 +38,37 @@ namespace OnBoardingWeb.DAL.Repositories
 
         public List<Project> LoadProject()
         {
-            return _db.Projects.ToList();
+            return _db.Projects.Where(p => p.Active.Value).ToList();
+        }
+
+        public bool DeleteProject(Guid id)
+        {
+            Project projectToDelete = _db.Projects.Find(id);
+            if (projectToDelete != null)
+            {
+                projectToDelete.Active = false;
+                _db.Entry(projectToDelete).State = System.Data.EntityState.Modified;
+                return true;
+            }
+            return false;
+
+
+        }
+
+        public void AddProject(Project p)
+        {
+            if (IsDuplicate(p))
+            {
+                throw new DuplicateNameException("This project name is already exist");
+            }
+
+            _db.Projects.Add(p);
+        }
+
+
+        private bool IsDuplicate(Project project)
+        {
+            return _db.Projects.Where(p => p.Active.Value && p.Name.Equals(project.Name, StringComparison.OrdinalIgnoreCase)).FirstOrDefault() != null;
         }
     }
 }

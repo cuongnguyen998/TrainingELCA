@@ -79,18 +79,22 @@ textarea {
     }
 
     .PagerStyle a {
-        color: #ffffff;
-        text-decoration: none;
+        color: #6666ff;
+        text-decoration: none !important;
         padding: 2px 10px 2px 10px;
-        border-top: solid 1px #777777;
-        border-right: solid 1px #333333;
-        border-bottom: solid 1px #333333;
-        border-left: solid 1px #777777;
+        border-top: solid 1px #6666ff;
+        border-right: solid 1px #6666ff;
+        border-bottom: solid 1px #6666ff;
+        border-left: solid 1px #6666ff;
     }
+        .PagerStyle a:hover {
+            background-color: #8080ff;
+            color: #ffffff;
+        }
 
     .PagerStyle span {
         font-weight: bold;
-        color: #FFFFFF;
+        color: #6666ff;
         text-decoration: none;
         padding: 2px 10px 2px 10px;
     }
@@ -109,5 +113,24 @@ textarea {
 }
 
 .SelectedRowStyle td {
-    background-color: #ffff66;
+    background-color: #99b3ff;
+}
+
+.table-condensed tr th {
+    border: 0px solid #6e7bd9 !important;
+    color: white !important;
+    background-color: #6e7bd9 !important;
+    text-align:center;
+}
+
+.table-condensed, .table-condensed tr td {
+    border: 0px solid #000 !important;
+}
+
+tr:nth-child(even) {
+    background: #f8f7ff !important;
+}
+
+tr:nth-child(odd) {
+    background: #fff !important;
 }
